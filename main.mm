@@ -248,6 +248,9 @@ class MetalLayer {
 class App {
     
     private:
+    
+        const int w = 1920*2;
+        const int h = 1080*2;
         
         unsigned int *_texture = nullptr;
         MetalLayer<Plane> *_layer = nullptr;
@@ -256,11 +259,12 @@ class App {
     
         App() {
             
-            int w = 1920*2;
-            int h = 1080*2;
-                            
-            this->_texture = new unsigned int[w*h];
-            for(int n=0; n<w*h; n++) this->_texture[n] = 0xFFFF0000;
+            this->_texture = new unsigned int[this->w*this->h];
+            for(int i=0; i<this->h; i++) {
+                for(int j=0; j<this->w; j++) {
+                    this->_texture[i*this->w+j] = (0x5555+(j<<2))<<16|(0x5555+(i<<2));
+                }
+            }
             
             this->_layer = new MetalLayer<Plane>();
             if(this->_layer->init(w,h)) {
@@ -269,9 +273,9 @@ class App {
 
                 this->_layer->update(^(id<MTLCommandBuffer> commandBuffer){
                     
-                    [this->_layer->drawableTexture() getBytes:this->_texture bytesPerRow:w*4 fromRegion:MTLRegionMake2D(0,0,w,h) mipmapLevel:0];
+                    [this->_layer->drawableTexture() getBytes:this->_texture bytesPerRow:this->w<<2 fromRegion:MTLRegionMake2D(0,0,this->w,this->h) mipmapLevel:0];
 
-                    stbi_write_png("test.png",w,h,4,(void const*)this->_texture,w<<2);
+                    stbi_write_png("test.png",this->w,this->h,4,(void const*)this->_texture,this->w<<2);
                     
                     this->_layer->cleanup();
                     
