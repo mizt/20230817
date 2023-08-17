@@ -18,6 +18,7 @@ vertex VertInOut vertexShader(constant float4 *pos[[buffer(0)]],constant packed_
 }
 
 fragment float4 fragmentShader(VertInOut inFrag[[stage_in]],constant FragmentShaderArguments &args[[buffer(0)]]) {
-    constexpr sampler sampler(address::clamp_to_edge, filter::linear);
-    return float4(args.texture.sample(sampler,inFrag.texcoord));
+    constexpr sampler sampler(address::clamp_to_edge,filter::linear);
+    float2 rg = args.texture.sample(sampler,inFrag.texcoord).rg; 
+    return float4(rg,0,0);
 }

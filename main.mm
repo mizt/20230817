@@ -88,7 +88,7 @@ class MetalLayer {
             
             this->_renderPipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatInvalid;
             this->_renderPipelineDescriptor.stencilAttachmentPixelFormat = MTLPixelFormatInvalid;
-            this->_renderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+            this->_renderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatRG16Unorm;
             this->_renderPipelineDescriptor.colorAttachments[0].blendingEnabled = NO;
             
             this->_renderPipelineDescriptor.rasterSampleCount = 1;
@@ -124,7 +124,7 @@ class MetalLayer {
             this->_indicesBuffer = [this->_device newBufferWithBytes:_data->indices length:_data->INDICES_SIZE*sizeof(short) options:MTLResourceCPUCacheModeDefaultCache];
             if(!this->_indicesBuffer) return false;
             
-            MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm width:this->_width height:this->_height mipmapped:NO];
+            MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRG16Unorm  width:this->_width height:this->_height mipmapped:NO];
             if(!texDesc) return false;
             
             this->_texture = [this->_device newTextureWithDescriptor:texDesc];
