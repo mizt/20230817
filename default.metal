@@ -19,6 +19,14 @@ vertex VertInOut vertexShader(constant float4 *pos[[buffer(0)]],constant packed_
 
 fragment float4 fragmentShader(VertInOut inFrag[[stage_in]],constant FragmentShaderArguments &args[[buffer(0)]]) {
     constexpr sampler sampler(address::clamp_to_edge,filter::linear);
+    
     float2 rg = args.texture.sample(sampler,inFrag.texcoord).rg; 
-    return float4(rg,0,0);
+    
+    unsigned short x = (int(rg.g*65535))&0xFF00|((int(rg.g*65535))&0xFF);
+    unsigned short y = (int(rg.r*65535))&0xFF00|((int(rg.r*65535))&0xFF);
+    
+    x+=1920*4;
+    y+=1080*4;
+    
+    return float4((y&0xFF00|x&0xFF)/65535.0,(x&0xFF00|y&0xFF)/65535.0,0,0);
 }
