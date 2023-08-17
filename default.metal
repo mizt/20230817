@@ -22,8 +22,8 @@ fragment float4 fragmentShader(VertInOut inFrag[[stage_in]],constant FragmentSha
     
     float2 rg = args.texture.sample(sampler,inFrag.texcoord).rg; 
     
-    unsigned short x = (int(rg.g*65535))&0xFF00|((int(rg.g*65535))&0xFF);
-    unsigned short y = (int(rg.r*65535))&0xFF00|((int(rg.r*65535))&0xFF);
+    unsigned short x = int(rg.g*65535);
+    unsigned short y = int(rg.r*65535);
     
     x+=1920*4;
     y+=1080*4;
