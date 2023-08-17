@@ -1,6 +1,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#define M_PI 3.14159265358979323846
+
 struct VertInOut {
     float4 pos[[position]];
     float2 texcoord[[user(texturecoord)]];
@@ -25,8 +27,7 @@ fragment float4 fragmentShader(VertInOut inFrag[[stage_in]],constant FragmentSha
     unsigned short x = int(rg.g*65535);
     unsigned short y = int(rg.r*65535);
     
-    x+=1920*4;
-    y+=1080*4;
+    x+=480*4*sin(2.0*M_PI*inFrag.texcoord.y);
     
     return float4((y&0xFF00|x&0xFF)/65535.0,(x&0xFF00|y&0xFF)/65535.0,0,0);
 }
